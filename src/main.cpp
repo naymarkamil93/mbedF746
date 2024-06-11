@@ -15,6 +15,7 @@ ThreadLvgl threadLvgl(30);  // Thread LVGL avec un taux de rafraîchissement de 
 const int SCREEN_WIDTH = 480;   // Largeur de l'écran
 const int SCREEN_HEIGHT = 272;  // Hauteur de l'écran
 
+
 // Propriétés de la raquette
 const int PADDLE_WIDTH = 10;     //Epaisseur  de la raquette
 const int PADDLE_HEIGHT = 50;   // Hauteur de la raquette
@@ -50,6 +51,17 @@ DigitalOut goal_led(LED_PIN);
 
 // Fonction pour initialiser l'interface LVGL
 void init_ui() {
+    lv_obj_clear_flag (lv_scr_act (), LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_scrollbar_mode(lv_scr_act(), LV_SCROLLBAR_MODE_OFF); 
+
+
+    static lv_style_t style_btn;
+    lv_style_init(&style_btn);
+    lv_style_set_bg_color(&style_btn, lv_color_black());
+    lv_style_set_bg_opa(&style_btn, LV_OPA_50);
+    lv_style_set_border_width(&style_btn, 2);
+    lv_style_set_border_color(&style_btn, lv_color_black());
+    lv_obj_set_style_bg_color(lv_scr_act(), lv_color_hex(0x7EBAB5), LV_PART_MAIN);
 
     // Créeattion la raquette 1
     paddle1 = lv_obj_create(lv_scr_act());
@@ -68,11 +80,17 @@ void init_ui() {
     ball_y = SCREEN_HEIGHT / 2 - BALL_SIZE / 2;
     lv_obj_align(ball, LV_ALIGN_TOP_LEFT, ball_x, ball_y);
 
+
+    static lv_style_t indicator_style;
+    lv_style_init(&indicator_style); 
+
+
     // score pour les deux joueurs
-    score_label1 = lv_label_create(lv_scr_act());
+   score_label1 = lv_label_create(lv_scr_act());
     lv_label_set_text_fmt(score_label1, "Joueur 1: %d", score1);
     lv_obj_align(score_label1, LV_ALIGN_TOP_LEFT, 10, 10);
 
+    
     score_label2 = lv_label_create(lv_scr_act());
     lv_label_set_text_fmt(score_label2, "Joueur 2: %d", score2);
     lv_obj_align(score_label2, LV_ALIGN_TOP_RIGHT, -10, 10);
@@ -189,3 +207,4 @@ int main() {
         ThisThread::sleep_for(30ms);
     }
 }
+
